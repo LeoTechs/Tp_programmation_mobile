@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
 // Page d'accueil de connexion
-class MyLoginPage extends StatefulWidget {
-  const MyLoginPage({Key? key}) : super(key: key);
+class MyRegistrationPage extends StatefulWidget {
+  const MyRegistrationPage({Key? key}) : super(key: key);
 
   @override
-  State<MyLoginPage> createState() => _MyLoginPageState();
+  State<MyRegistrationPage> createState() => _MyRegistrationPageState();
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
+class _MyRegistrationPageState extends State<MyRegistrationPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +35,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 60.0, left: 22.0),
               child: Text(
-                "Smart Tchop\nConnexion !", // Pas de virgule nécessaire ici
+                "Smart Tchop\n Inscription !", // Pas de virgule nécessaire ici
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -59,6 +64,24 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   children: [
                     TextField(
                       decoration: InputDecoration(
+                        label: Text("Nom",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold)),
+                        suffixIcon: Icon(Icons.person, color: Colors.grey),
+                      ),
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        label: Text("Prénom",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold)),
+                        suffixIcon: Icon(Icons.person, color: Colors.grey),
+                      ),
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
                         label: Text("Email",
                             style: TextStyle(
                                 color: Colors.red,
@@ -78,17 +101,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Mot de passe oublié ?",
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
                     Container(
                       width: 300,
                       height: 55,
@@ -122,11 +134,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            "Vous n'aves pas de compte ?",
+                            "Vous avez déjà un compte ?",
                             style: TextStyle(color: Colors.grey),
                           ),
                           Text(
-                            "S'inscrire ",
+                            "Se connecter",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
