@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartchop/container_images.dart';
-import 'package:smartchop/myLoginPage.dart';
+import 'package:smartchop/pages/onboarding/container_images.dart';
+import 'package:smartchop/pages/auth/myLoginPage.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MyOnboardingPage extends StatefulWidget {

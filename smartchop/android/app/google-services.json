@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384498868191",
+    "project_id": "smartchop-c9125",
+    "storage_bucket": "smartchop-c9125.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384498868191:android:8be9cf9e13e44f54de2e6a",
+        "android_client_info": {
+          "package_name": "com.example.smartchop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHL2LrDOeo_nI-r8dwHtd-bDnl2YkiapY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

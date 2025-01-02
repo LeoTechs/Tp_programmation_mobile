@@ -42,3 +42,13 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+// Add the following line, and ensure it's located at the end of the file.
+
+
+
+apply plugin: 'com.google.gms.google-services'

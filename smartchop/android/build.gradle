@@ -16,3 +16,15 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+ext {
+    kotlin_version = '1.5.31' // Remplacez par la version que vous utilisez
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // autres dépendances
+}
+
+
+// build.gradle (niveau projet)
+

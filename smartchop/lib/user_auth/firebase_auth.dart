@@ -1,7 +1,8 @@
+// ignore: depend_on_referenced_packages
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
@@ -15,6 +16,7 @@ class FirebaseAuthService {
       } else if (e.code == 'wrong-password') {
         print('Mot de passe incorrect.');
       }
+      return null;
     }
   }
 
@@ -33,5 +35,6 @@ class FirebaseAuthService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 }
