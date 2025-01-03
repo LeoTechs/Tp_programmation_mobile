@@ -3,16 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smartchop/global/notifier.dart';
 import 'package:smartchop/model/Meal.dart';
 import 'package:smartchop/pages/MealDetailPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MealsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Liste des Repas'),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('meals').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('meals')
+            .where('userId', isEqualTo: userId)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -25,6 +32,10 @@ class MealsPage extends StatelessWidget {
           final meals = snapshot.data!.docs.map((doc) {
             return Meal.fromMap(doc.data() as Map<String, dynamic>, doc.id);
           }).toList();
+
+          if (meals.isEmpty) {
+            return Center(child: Text('La liste des repas est vide.'));
+          }
 
           return ListView.builder(
             itemCount: meals.length,
@@ -76,13 +87,23 @@ class MealsPage extends StatelessWidget {
                         ),
                         IconButton(
                           icon: Icon(Icons.delete),
-                          onPressed: () {},
+                          onPressed: () {
+                            // Supprimer le repas
+                            showDeleteDialog(context, meal.id);
+                          },
                         ),
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/edit-meal',
-                                arguments: meal);
+                            // Mettre à jour le repas
+                            if (userId != null) {
+                              showUpdateDialog(context, meal, userId!);
+                            } else {
+                              // Handle the case where userId is null
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('User ID is null')),
+                              );
+                            }
                           },
                         ),
                       ],

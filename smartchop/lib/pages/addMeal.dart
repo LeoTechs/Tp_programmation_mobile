@@ -30,6 +30,7 @@ class _AddMealPageState extends State<AddMealPage> {
         calories: _calories,
         creationDate: _creationDate,
         description: _description,
+        userId: user!.uid,
       );
 
       // Ajouter le repas à Firestore

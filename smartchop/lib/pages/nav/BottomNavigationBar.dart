@@ -19,7 +19,9 @@ class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
     HomePage(),
     MealsPage(),
     StatisticsPage(),
-    ProfilePage(),
+    ProfilePage(
+      userId: '',
+    ),
     ChatbotPage(),
   ];
 

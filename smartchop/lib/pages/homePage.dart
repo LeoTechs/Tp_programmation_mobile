@@ -39,7 +39,10 @@ class HomePage extends StatelessWidget {
 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                    builder: (context) => ProfilePage(
+                          userId: '',
+                        )),
               );
             }),
             _buildCard(context, Icons.chat, 'Chatbot', () {
