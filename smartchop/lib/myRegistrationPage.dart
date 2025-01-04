@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:smartchop/global/toast.dart';
 import 'package:smartchop/pages/homePage.dart';
 import 'package:smartchop/pages/auth/myLoginPage.dart';
+import 'package:smartchop/user_auth/firebase_auth.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 
+// Page d'accueil de connexion
 class MyRegistrationPage extends StatefulWidget {
   const MyRegistrationPage({Key? key}) : super(key: key);
 
@@ -16,14 +14,11 @@ class MyRegistrationPage extends StatefulWidget {
 }
 
 class _MyRegistrationPageState extends State<MyRegistrationPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  bool _isPasswordVisible = false;
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -46,15 +41,15 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  const Color.fromARGB(255, 75, 5, 82),
-                  const Color.fromARGB(255, 207, 3, 3),
+                  const Color.fromARGB(255, 75, 5, 82), // Virgule correcte
+                  const Color.fromARGB(255, 207, 3, 3), // Virgule correcte
                 ],
               ),
             ),
             child: Padding(
               padding: const EdgeInsets.only(top: 60.0, left: 22.0),
               child: Text(
-                "Smart Tchop\n Inscription !",
+                "Smart Tchop\n Inscription !", // Pas de virgule nécessaire ici
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -103,52 +98,40 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                     ),
                     TextField(
                       controller: _passwordController,
-                      obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
-                          label: Text("Mot de passe",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold)),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.grey,
-                            ),
-                          )),
+                        label: Text(
+                            "Mot de passe", // Pas de virgule nécessaire ici
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold)),
+                        suffixIcon:
+                            Icon(Icons.visibility_off, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 20),
-                    _isLoading
-                        ? CircularProgressIndicator()
-                        : Container(
-                            width: 300,
-                            height: 55,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  const Color.fromARGB(255, 75, 5, 82),
-                                  const Color.fromARGB(255, 207, 3, 3),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: TextButton(
-                              onPressed: _register,
-                              child: Text(
-                                "INSCRIPTION",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
-                            ),
-                          ),
+                    Container(
+                      width: 300,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(255, 75, 5, 82),
+                            const Color.fromARGB(255, 207, 3, 3),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: TextButton(
+                        onPressed: _register,
+                        child: Text(
+                          "INSCRIPTION",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 50,
                     ),
@@ -191,45 +174,19 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
   }
 
   void _register() async {
-    setState(() {
-      _isLoading = true;
-    });
-
     String username = _nameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    try {
-      final bytes = utf8.encode(password);
-      final digest = sha256.convert(bytes);
-      final hashedPassword = digest.toString();
-      password = hashedPassword;
+    User? user = await _auth.createUserWithEmailAndPassword(email, password);
 
-      final UserCredential newUser = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      if (newUser != null) {
-        await _firestore.collection('users').doc(newUser.user!.uid).set({
-          'username': username,
-          'email': email,
-          'password': password,
-        });
-
-        //Mettre à jour le profil de l'utilisateur avec le nom
-        await newUser.user!.updateDisplayName(username);
-
-        showToast("Utilisateur enregistré avec succès");
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomePage()));
-      } else {
-        showToast("Erreur lors de l'enregistrement de l'utilisateur");
-      }
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    if (user != null) {
+      user.updateDisplayName(username);
+      print("Utilisateur enregistré avec succès");
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    } else {
+      print("Erreur lors de l'enregistrement de l'utilisateur");
     }
   }
 }

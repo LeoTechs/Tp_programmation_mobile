@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smartchop/global/toast.dart';
 import 'package:smartchop/model/Meal.dart';
 
 // je veux creer une fonction qui utilise ScaffoldMessenger pour afficher un message
@@ -81,6 +82,8 @@ void showUpdateDialog(BuildContext context, Meal meal, String userId) {
                 userId: userId,
               );
               updateMeal(meal.id, updatedMeal); // Fermer la boîte de dialogue
+              Navigator.of(context).pop();
+              showToast("Repas mis à jour avec succès");
             },
             child: Text('Mettre à jour'),
           ),
